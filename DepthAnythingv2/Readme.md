@@ -3,5 +3,6 @@
 
 ## Demo of ViTL model
 ![ViTL Demo](./demo/vitl_demo.gif)
-As we can see from ViTL Demo, the depth prediction is not consistent with the hand moving.
-In the next step we are going to deploy [consistent_depth](https://github.com/facebookresearch/consistent_depth) that could potentially sove the inconsistency problem.
++ As we can see from ViTL Demo, the depth prediction is not consistent with the hand moving.
++ In the next step we are going to deploy [consistent_depth](https://github.com/facebookresearch/consistent_depth) that could potentially sove the inconsistency problem.
++ The prediction efficiency is acceptable for robotic application. Later on we may deploy it on a drone with ROS.
