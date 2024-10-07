@@ -20,3 +20,9 @@ To compile the C++ files, follow these steps:
    cd build
    cmake ../src
    make
+   ```
+### Pre-trained weights
+
+You can download the pre-trained weights in .engine format in the following link. Currently, Depth-Anything-Large (vitl) and Yolov10 are available.
+
+https://drive.google.com/drive/folders/1mT8IovtHt9k0CL8TIHs4qFea9LiXGdSW?usp=drive_link
