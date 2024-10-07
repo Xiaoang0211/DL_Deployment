@@ -15,8 +15,8 @@ Before compiling the C++ files in the `/src` directory, you may need to install 
 Additionally, ensure that you adjust the directory paths to point to the correct TensorRT installation location on your system.
 
 To compile the C++ files, follow these steps:
-
-1. Create a build directory:
    ```bash
    mkdir build
-
+   cd build
+   cmake ../src
+   make
