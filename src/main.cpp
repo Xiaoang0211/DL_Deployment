@@ -49,6 +49,7 @@ class Logger : public nvinfer1::ILogger {
 
 int main(int argc, char** argv) {
     bool model_loaded = false;
+    bool use_fp16 = false;
 
     unordered_map<string, string> options;
     string previous_option = "";
@@ -72,6 +73,13 @@ int main(int argc, char** argv) {
         }
     }
 
+    // Check if FP16 mode is enabled
+    if (!options["fp16"].empty()) 
+    {
+        use_fp16 = true;
+        cout << "Using model with FP16 precision." << endl;
+    }
+
     // load selected model
     if (!options["model"].empty()) {
         string model_path = options["model"];
@@ -82,7 +90,8 @@ int main(int argc, char** argv) {
         }
         cout << "Loading model: \"" << model_path << "\"" <<  endl;
 
-        string alternate_path = model_path.substr(0, model_path.length() - 5) + ".engine";
+        string alternate_path = model_path.substr(0, model_path.length() - 5) + (use_fp16 ? "-half.engine" : ".engine");
+
         if (model_path.substr(model_path.find_last_of('.') + 1) == "onnx" && IsFile(alternate_path)) {
             if (options["find-engine"].empty()) {
                 string confirm_engine = "";
@@ -95,7 +104,16 @@ int main(int argc, char** argv) {
                 model_path = alternate_path;
             }
         }
-        model.init(model_path, logger);
+
+        if (use_fp16)
+        {
+            model.init(model_path, logger, true); // Pass FP16 flag
+        }
+        else
+        {   
+            model.init(model_path, logger);
+        }
+ 
         cout << "Model successfully loaded." << endl << endl;
         model_loaded = true;
     }

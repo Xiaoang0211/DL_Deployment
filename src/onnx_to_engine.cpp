@@ -13,7 +13,7 @@ using namespace nvinfer1;
 DLModel::DLModel()
 {}
 
-void DLModel::init(std::string model_path, nvinfer1::ILogger& logger)
+void DLModel::init(std::string model_path, nvinfer1::ILogger& logger, bool use_fp16)
 {
     // Deserialize an engine
     if (model_path.find(".onnx") == std::string::npos)
@@ -34,8 +34,8 @@ void DLModel::init(std::string model_path, nvinfer1::ILogger& logger)
     }
     // Build an engine from an onnx model
     else{
-        build(model_path, logger);
-        saveEngine(model_path);
+        build(model_path, logger, use_fp16);
+        saveEngine(model_path, use_fp16);
     }
 }
 
@@ -51,16 +51,23 @@ DLModel::~DLModel(){}
  * @param onnxPath 
  * @param logger 
  */
-void DLModel::build(std::string onnxPath, nvinfer1::ILogger& logger)
+void DLModel::build(std::string onnxPath, nvinfer1::ILogger& logger, bool use_fp16)
 {
     auto builder = createInferBuilder(logger);
     const auto explicitBatch = 1U << static_cast<uint32_t>(NetworkDefinitionCreationFlag::kEXPLICIT_BATCH);
     INetworkDefinition* network = builder->createNetworkV2(explicitBatch);
     IBuilderConfig* config = builder->createBuilderConfig();
-    if (isFP16)
+    
+    if (use_fp16 && builder->platformHasFastFp16())
     {
         config->setFlag(BuilderFlag::kFP16);
+        std::cout << "Building model in FP16 precision..." << std::endl;
     }
+    else 
+    {
+        std::cout << "Building model in FP32 precision..." << std::endl;
+    }
+
     nvonnxparser::IParser* parser = nvonnxparser::createParser(*network, logger);
     bool parsed = parser->parseFromFile(onnxPath.c_str(), static_cast<int>(nvinfer1::ILogger::Severity::kINFO));
     IHostMemory* plan{ builder->buildSerializedNetwork(*network, *config)};
@@ -77,13 +84,18 @@ void DLModel::build(std::string onnxPath, nvinfer1::ILogger& logger)
     delete plan;
 }
 
-bool DLModel::saveEngine(const std::string& onnxpath)
+bool DLModel::saveEngine(const std::string& onnxpath, bool use_fp16)
 {
     // find engine path from onnx path
     std::string engine_path;
     size_t dot_index = onnxpath.find_last_of(".");
     if (dot_index != std::string::npos) {
-        engine_path = onnxpath.substr(0, dot_index) + ".engine";
+        engine_path = onnxpath.substr(0, dot_index);
+        if (use_fp16)
+        {
+            engine_path += "-half";
+        }
+        engine_path += ".engine";
     } 
     else
     {
