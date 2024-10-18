@@ -39,7 +39,6 @@ public:
     YOLO_V11POSE(_DL_CONFIG_PARAM& cfg);
     void init(std::string model_path, nvinfer1::ILogger& logger, bool use_fp16=false);
     std::vector<_DL_RESULT> predict(cv::Mat& img, std::vector<_DL_RESULT>& prediction_results, bool use_fp16);
-    void drawBbox(cv::Mat& img, std::vector<_DL_RESULT>& results);
     void draw_objects(const cv::Mat&                                         image,
                                cv::Mat&                                      result,
                                const std::vector<_DL_RESULT>&                res,

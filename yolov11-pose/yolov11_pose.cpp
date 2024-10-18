@@ -380,25 +380,6 @@ void YOLO_V11POSE::postprocess(float* outputData, std::vector<_DL_RESULT>& res, 
     }
 }
 
-void YOLO_V11POSE::drawBbox(cv::Mat& img, std::vector<_DL_RESULT>& res) 
-{
-   // Iterate through each result in the 'res' vector
-    for (size_t j = 0; j < res.size(); j++) 
-    {
-        // Draw a rectangle around the detected object using the bounding box (bbox)
-        cv::rectangle(img, res[j].rect, cv::Scalar(255, 0, 255), 2);
-        // Add text label and confidence score near the top-left corner of the bounding box
-        cv::putText(
-            img,  // The image on which to draw
-            std::to_string(res[j].classId) + "-" + std::to_string(res[j].confidence), // Text to display: label and confidence score
-            cv::Point(res[j].rect.x, res[j].rect.y - 1), // Position of the text (slightly above the top-left corner of the bounding box)
-            cv::FONT_HERSHEY_PLAIN, // Font type
-            1.2, // Font size
-            cv::Scalar(0, 0, 255), // Text color (red)
-            2 // Thickness of the text
-        );
-    }
-}
 
 void YOLO_V11POSE::draw_objects(const cv::Mat&                                image,
                                cv::Mat&                                      result,
@@ -410,13 +391,13 @@ void YOLO_V11POSE::draw_objects(const cv::Mat&                                im
     result = image.clone();
     const int num_point = 17;
     for (auto& re : res) {
-        cv::rectangle(result, re.rect, {0, 0, 255}, 2);
+        cv::rectangle(result, re.rect, {0, 0, 255}, 5);
 
         char text[256];
         sprintf(text, "person %.1f%%", re.confidence * 100);
 
         int baseLine = 0;
-        cv::Size label_size = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.4, 1, &baseLine);
+        cv::Size label_size = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 2, 2, &baseLine);
 
         int x = (int)re.rect.x;
         int y = (int)re.rect.y + 1;
@@ -426,7 +407,7 @@ void YOLO_V11POSE::draw_objects(const cv::Mat&                                im
 
         cv::rectangle(result, cv::Rect(x, y, label_size.width, label_size.height + baseLine), {0, 0, 255}, -1);
 
-        cv::putText(result, text, cv::Point(x, y + label_size.height), cv::FONT_HERSHEY_SIMPLEX, 0.4, {255, 255, 255}, 1);
+        cv::putText(result, text, cv::Point(x, y + label_size.height), cv::FONT_HERSHEY_SIMPLEX, 2, {255, 255, 255}, 2);
 
         auto& kps = re.kps;
         for (int k = 0; k < num_point + 2; k++) {
