@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 3.12)
-project(yolov11)
+project(yolov11-seg)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 
 # Add source files
 set(SOURCES
-    yolov11.cpp
+    yolov11_segment.cpp
     main.cpp
     # ... add more source files here if needed
 )
 
 # Add headers
 set(HEADERS
-    yolov11.h
+    yolov11_segment.h
     # ... add more header files here if needed
 )
 

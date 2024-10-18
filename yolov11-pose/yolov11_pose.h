@@ -10,20 +10,8 @@
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
 
-enum MODEL_TYPE
-{
-    // FLOAT32 MODEL
-    YOLO_POSE_V11 = 1,
-    YOLO_DETECT_V11 = 2, 
-
-    // FLOAT16 MODEL
-    YOLO_POSE_V11_HALF = 3,
-    YOLO_DETECT_V11_HALF = 4,
-};
-
 typedef struct _DL_CONFIG_PARAM
 {
-    MODEL_TYPE modelType;
     std::vector<int> imgSize = {640, 640}; // input image size for yolo
     float rectConfidenceThreshold = 0.6;
     float iouThreshold = 0.5;
@@ -45,10 +33,10 @@ inline static float clamp(float val, float min, float max)
     return val > min ? (val < max ? val : max) : min;
 }
 
-class YOLO_V11
+class YOLO_V11POSE
 {
 public:
-    YOLO_V11(_DL_CONFIG_PARAM& cfg);
+    YOLO_V11POSE(_DL_CONFIG_PARAM& cfg);
     void init(std::string model_path, nvinfer1::ILogger& logger, bool use_fp16=false);
     std::vector<_DL_RESULT> predict(cv::Mat& img, std::vector<_DL_RESULT>& prediction_results, bool use_fp16);
     void drawBbox(cv::Mat& img, std::vector<_DL_RESULT>& results);
@@ -58,7 +46,7 @@ public:
                                const std::vector<std::vector<unsigned int>>& SKELETON,
                                const std::vector<std::vector<unsigned int>>& KPS_COLORS,
                                const std::vector<std::vector<unsigned int>>& LIMB_COLORS);
-    ~YOLO_V11();
+    ~YOLO_V11POSE();
     float img_height;   // camera image height
     float img_width;    // camera image width
 

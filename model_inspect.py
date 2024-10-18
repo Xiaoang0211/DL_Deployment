@@ -11,14 +11,14 @@ def load_engine(engine_file_path):
 
 if __name__ == "__main__":
     # Path to the .engine file
-    engine_path = "/home/xiaoang/DL_Deployment/src/yolo11m-pose.engine"
+    engine_path = "/home/xiaoang/YOLOModels/yolov11/segmentation/yolo11s-seg.engine"
 
     # Load the engine
     engine = load_engine(engine_path)
-    output_name = engine.get_tensor_name(0)
+    output_name = engine.get_tensor_name(1)
     output_shape_images = engine.get_tensor_shape("images")
     output_shape_images = engine.get_tensor_format_desc("output0")
-    output_shape_output0 = engine.get_tensor_shape("output0")
+    output_shape_output0 = engine.get_tensor_shape("output1")
     print(output_name)
     print(output_shape_images)
     print(output_shape_output0)

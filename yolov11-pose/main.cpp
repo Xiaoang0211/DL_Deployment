@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <NvInfer.h>
 #include <opencv2/opencv.hpp>
-#include "yolov11.h"
+#include "yolov11_pose.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -110,12 +110,12 @@ class Logger : public nvinfer1::ILogger {
 int main(int argc, char** argv) {
     bool model_loaded = false;
     bool use_fp16 = false;
+    DL_CONFIG_PARAM config;
 
     unordered_map<string, string> options;
     string previous_option = "";
     string current_argument = "";
-    DL_CONFIG_PARAM config;
-    YOLO_V11 model(config);
+    YOLO_V11POSE model(config);
     int cutoff = 0;
     for (int i = 0; i < argc; i++) {
         cutoff = 0;

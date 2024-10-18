@@ -1,7 +1,7 @@
 #include <NvOnnxParser.h>
 #include "NvInferPlugin.h"
 #include <fstream>
-#include "yolov11.h"
+#include "yolov11_pose.h"
 
 #define RET_OK 0
 
@@ -13,7 +13,7 @@ using namespace nvinfer1;
  * @param logger Nvinfer ILogger 
  */
 
-YOLO_V11::YOLO_V11(_DL_CONFIG_PARAM& cfg)
+YOLO_V11POSE::YOLO_V11POSE(_DL_CONFIG_PARAM& cfg)
 {
     imgSize = cfg.imgSize;
     confThresh = cfg.rectConfidenceThreshold;
@@ -21,7 +21,7 @@ YOLO_V11::YOLO_V11(_DL_CONFIG_PARAM& cfg)
     topk = cfg.topk;
 }
 
-void YOLO_V11::init(std::string model_path, nvinfer1::ILogger& logger, bool use_fp16)
+void YOLO_V11POSE::init(std::string model_path, nvinfer1::ILogger& logger, bool use_fp16)
 {
     // Deserialize an engine
     if (model_path.find(".engine") != std::string::npos)
@@ -95,7 +95,7 @@ void YOLO_V11::init(std::string model_path, nvinfer1::ILogger& logger, bool use_
  * @brief Destroy the DLModel::DLModel object
  * 
  */
-YOLO_V11::~YOLO_V11(){
+YOLO_V11POSE::~YOLO_V11POSE(){
     if (stream)
         cudaStreamDestroy(stream);
     if (buffer[0])
@@ -116,7 +116,7 @@ YOLO_V11::~YOLO_V11(){
  * @param onnxPath 
  * @param logger 
  */
-void YOLO_V11::build(std::string onnxPath, nvinfer1::ILogger& logger, bool use_fp16)
+void YOLO_V11POSE::build(std::string onnxPath, nvinfer1::ILogger& logger, bool use_fp16)
 {
     auto builder = createInferBuilder(logger);
     const auto explicitBatch = 1U << static_cast<uint32_t>(NetworkDefinitionCreationFlag::kEXPLICIT_BATCH);
@@ -143,7 +143,7 @@ void YOLO_V11::build(std::string onnxPath, nvinfer1::ILogger& logger, bool use_f
     delete builder;
 }
 
-bool YOLO_V11::saveEngine(const std::string& onnxpath)
+bool YOLO_V11POSE::saveEngine(const std::string& onnxpath)
 {
     // find engine path from onnx path
     std::string engine_path;
@@ -181,7 +181,7 @@ bool YOLO_V11::saveEngine(const std::string& onnxpath)
  * @param iImage raw image
  * @param data preprocessed image
  */
-void YOLO_V11::preprocess(const cv::Mat& img, cv::Mat& out, bool use_fp16=false)
+void YOLO_V11POSE::preprocess(const cv::Mat& img, cv::Mat& out, bool use_fp16=false)
 {
     cv::Mat mat;
 
@@ -228,7 +228,7 @@ void YOLO_V11::preprocess(const cv::Mat& img, cv::Mat& out, bool use_fp16=false)
  * 
  * @param img input image
  */
-std::vector<_DL_RESULT> YOLO_V11::predict(cv::Mat& img, std::vector<_DL_RESULT>& prediction_results, bool use_fp16)
+std::vector<_DL_RESULT> YOLO_V11POSE::predict(cv::Mat& img, std::vector<_DL_RESULT>& prediction_results, bool use_fp16)
 {
     // Preprocessing
     cv::Mat inputData;
@@ -294,7 +294,7 @@ std::vector<_DL_RESULT> YOLO_V11::predict(cv::Mat& img, std::vector<_DL_RESULT>&
  * @brief postprocessing
  * 
  */
-void YOLO_V11::postprocess(float* outputData, std::vector<_DL_RESULT>& res, int topk)
+void YOLO_V11POSE::postprocess(float* outputData, std::vector<_DL_RESULT>& res, int topk)
 {   
     res.clear();
 
@@ -380,7 +380,7 @@ void YOLO_V11::postprocess(float* outputData, std::vector<_DL_RESULT>& res, int 
     }
 }
 
-void YOLO_V11::drawBbox(cv::Mat& img, std::vector<_DL_RESULT>& res) 
+void YOLO_V11POSE::drawBbox(cv::Mat& img, std::vector<_DL_RESULT>& res) 
 {
    // Iterate through each result in the 'res' vector
     for (size_t j = 0; j < res.size(); j++) 
@@ -400,7 +400,7 @@ void YOLO_V11::drawBbox(cv::Mat& img, std::vector<_DL_RESULT>& res)
     }
 }
 
-void YOLO_V11::draw_objects(const cv::Mat&                                image,
+void YOLO_V11POSE::draw_objects(const cv::Mat&                                image,
                                cv::Mat&                                      result,
                                const std::vector<_DL_RESULT>&                res,
                                const std::vector<std::vector<unsigned int>>& SKELETON,

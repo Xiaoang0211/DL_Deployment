@@ -1,0 +1,3 @@
+# Ignore all build directories within DepthAnythingv2, yolov11-detect, and yolov11-pose
+**/build/
+/.vscode/

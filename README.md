@@ -3,22 +3,23 @@ This repository is focused on preparing deep learning models that are potentiall
 
 ## Converting `.onnx` to `.engine`
 
-In the `/src` directory, you will find C++ files designed for converting `.onnx` models to `.engine` files. These files can be customized to suit other deployment needs.
+In the `/ONNX2Engine` directory, you will find the files for converting `.onnx` models to `.engine` files. These files can be customized to suit other deployment needs.
 
 ### Compilation Instructions
 
-Before compiling the C++ files in the `/src` directory, you may need to install the following dependencies:
+Before compiling, you may need to install the following dependencies:
 - CUDA
 - OpenCV
 - TensorRT
 
 Additionally, ensure that you adjust the directory paths to point to the correct TensorRT installation location on your system.
 
-To compile the C++ files, follow these steps:
+To compile the C++ files, follow these steps taking yolov11-segment as example:
    ```bash
+   cd <yolov11-segment>
    mkdir build
    cd build
-   cmake ../src
+   cmake ..
    make
    ```
 ### Pre-trained weights
