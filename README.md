@@ -16,7 +16,7 @@ Additionally, ensure that you adjust the directory paths to point to the correct
 
 To compile the C++ files, follow these steps taking yolov11-segment as example:
    ```bash
-   cd <yolov11-segment>
+   cd yolov11-segment
    mkdir build
    cd build
    cmake ..
