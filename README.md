@@ -46,11 +46,7 @@ The simulation uses a custom drone model in PX4 Autopilot, designated as `"x500_
 
 To build a Visual-Inertial SLAM (VI-SLAM) simulation in Gazebo Sim, the following components are required:
 
-1. **Collision Prevention**  
-   - Adapted from the official [PX4 Autopilot](https://github.com/PX4/PX4-Autopilot) repository, this component enables the drone to detect and avoid obstacles in its surroundings, ensuring safe navigation during the random walk.
-
-2. **Random Walk Algorithm**  
-   - This component implements a random movement pattern for the drone within the simulated environment, while leveraging the collision prevention algorithm to maintain obstacle-free navigation.
+1. **Collision Prevention**  (or any other compatible environment).mulated environment, while leveraging the collision prevention algorithm to maintain obstacle-free navigation.
 
 3. **Visual-Inertial SLAM (VI-SLAM)**  
    - For SLAM, the open-source **okvis** VI-SLAM framework is integrated. This provides the necessary functionality for real-time localization and mapping using visual and inertial inputs. The [okvis2 repository](https://github.com/smartroboticslab/okvis2) provides further implementation details.
