@@ -1,5 +1,7 @@
 # DL_Deployment
-This repository is focused on preparing deep learning models that are potentially going to be deployed on robots, such as UAVs (Unmanned Aerial Vehicles).
+Goal of this project is to develop a software for an UAV that can do the following tasks:
+1. The UAV explores a new environment with OKVIS 2 and obstcale avoidance algorithm.
+2. A 3D Gaussian 
 
 ## Converting `.onnx` to `.engine`
 
